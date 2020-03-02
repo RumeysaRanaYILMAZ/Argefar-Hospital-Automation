@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0a2caff9e1f64236b4a23e35b91929b0" Name="Diagram1">
+        <EntityTypeShape EntityType="HastahaneModel.Doktor" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HastahaneModel.Hasta" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HastahaneModel.İlaç" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HastahaneModel.Muayene" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="HastahaneModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="HastahaneModel.FK_Hasta_Doktor" ManuallyRouted="false" />
+        <AssociationConnector Association="HastahaneModel.FK_Muayene_Doktor" ManuallyRouted="false" />
+        <AssociationConnector Association="HastahaneModel.FK_Muayene_Hasta" ManuallyRouted="false" />
+        <AssociationConnector Association="HastahaneModel.FK_Muayene_İlaç" ManuallyRouted="false" />
+        <AssociationConnector Association="HastahaneModel.DH" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

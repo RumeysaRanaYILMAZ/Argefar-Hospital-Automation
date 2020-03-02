@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HastahaneModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DH">
+    <Key>
+      <PropertyRef Name="DTC" />
+      <PropertyRef Name="HTC" />
+    </Key>
+    <Property Name="DTC" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="HTC" Type="nvarchar" MaxLength="11" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Doktor">
+    <Key>
+      <PropertyRef Name="Tcno" />
+    </Key>
+    <Property Name="Tcno" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="D.Ad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="D.Soyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DogumYili" Type="int" Nullable="false" />
+    <Property Name="Bransi" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Hasta">
+    <Key>
+      <PropertyRef Name="Tcno" />
+    </Key>
+    <Property Name="Tcno" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="H.Ad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="H.Soyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DoğumYılı" Type="int" Nullable="false" />
+    <Property Name="AileHekimi" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="SosyalGüvence" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="İlaç">
+    <Key>
+      <PropertyRef Name="İlaç Adı" />
+    </Key>
+    <Property Name="İlaç Adı" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Fiyatı" Type="money" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Muayene">
+    <Key>
+      <PropertyRef Name="Tarih" />
+      <PropertyRef Name="Doktoru" />
+    </Key>
+    <Property Name="Tarih" Type="date" Nullable="false" />
+    <Property Name="TCno" Type="nvarchar" MaxLength="11" />
+    <Property Name="Branşı" Type="nvarchar" MaxLength="50" />
+    <Property Name="Doktoru" Type="nvarchar" MaxLength="11" Nullable="false" />
+    <Property Name="İlac" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_DH_Doktor1">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DH" Type="Self.DH" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doktor">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="DH">
+        <PropertyRef Name="DTC" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DH_Hasta1">
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="DH" Type="Self.DH" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hasta">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="DH">
+        <PropertyRef Name="HTC" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Hasta_Doktor">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="1" />
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doktor">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Hasta">
+        <PropertyRef Name="AileHekimi" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_Doktor">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doktor">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="Doktoru" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_Hasta">
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hasta">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="TCno" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_İlaç">
+    <End Role="İlaç" Type="Self.İlaç" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="İlaç">
+        <PropertyRef Name="İlaç Adı" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="İlac" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="buldur" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TC8" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="gider" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Tc" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="keke" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="leona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Tc" Type="nvarchar" Mode="In" />
+    <Parameter Name="sonuc" Type="int" Mode="InOut" />
+  </Function>
+  <Function Name="MuayeneDoktor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TC8" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Tarihtenİlaclara" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Tcno" Type="nvarchar" Mode="In" />
+    <Parameter Name="tarih" Type="date" Mode="In" />
+  </Function>
+  <Function Name="tresh" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Tc" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="HastahaneModelStoreContainer">
+    <EntitySet Name="DH" EntityType="Self.DH" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Doktor" EntityType="Self.Doktor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Hasta" EntityType="Self.Hasta" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="İlaç" EntityType="Self.İlaç" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Muayene" EntityType="Self.Muayene" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_DH_Doktor1" Association="Self.FK_DH_Doktor1">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="DH" EntitySet="DH" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DH_Hasta1" Association="Self.FK_DH_Hasta1">
+      <End Role="Hasta" EntitySet="Hasta" />
+      <End Role="DH" EntitySet="DH" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Hasta_Doktor" Association="Self.FK_Hasta_Doktor">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="Hasta" EntitySet="Hasta" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_Doktor" Association="Self.FK_Muayene_Doktor">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_Hasta" Association="Self.FK_Muayene_Hasta">
+      <End Role="Hasta" EntitySet="Hasta" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_İlaç" Association="Self.FK_Muayene_İlaç">
+      <End Role="İlaç" EntitySet="İlaç" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

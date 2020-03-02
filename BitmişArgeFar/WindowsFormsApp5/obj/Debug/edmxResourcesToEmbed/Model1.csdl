@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HastahaneModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Doktor">
+    <Key>
+      <PropertyRef Name="Tcno" />
+    </Key>
+    <Property Name="Tcno" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="D_Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="D_Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DogumYili" Type="Int32" Nullable="false" />
+    <Property Name="Bransi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Hasta" Relationship="Self.FK_Hasta_Doktor" FromRole="Doktor" ToRole="Hasta" />
+    <NavigationProperty Name="Muayene" Relationship="Self.FK_Muayene_Doktor" FromRole="Doktor" ToRole="Muayene" />
+    <NavigationProperty Name="Hasta1" Relationship="Self.DH" FromRole="Doktor" ToRole="Hasta" />
+  </EntityType>
+  <EntityType Name="Hasta">
+    <Key>
+      <PropertyRef Name="Tcno" />
+    </Key>
+    <Property Name="Tcno" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="H_Ad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="H_Soyad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DoğumYılı" Type="Int32" Nullable="false" />
+    <Property Name="AileHekimi" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="SosyalGüvence" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Doktor" Relationship="Self.FK_Hasta_Doktor" FromRole="Hasta" ToRole="Doktor" />
+    <NavigationProperty Name="Muayene" Relationship="Self.FK_Muayene_Hasta" FromRole="Hasta" ToRole="Muayene" />
+    <NavigationProperty Name="Doktor1" Relationship="Self.DH" FromRole="Hasta" ToRole="Doktor" />
+  </EntityType>
+  <EntityType Name="İlaç">
+    <Key>
+      <PropertyRef Name="İlaç_Adı" />
+    </Key>
+    <Property Name="İlaç_Adı" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Fiyatı" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <NavigationProperty Name="Muayene" Relationship="Self.FK_Muayene_İlaç" FromRole="İlaç" ToRole="Muayene" />
+  </EntityType>
+  <EntityType Name="Muayene">
+    <Key>
+      <PropertyRef Name="Tarih" />
+      <PropertyRef Name="Doktoru" />
+    </Key>
+    <Property Name="Tarih" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="TCno" Type="String" MaxLength="11" FixedLength="false" Unicode="true" />
+    <Property Name="Branşı" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Doktoru" Type="String" MaxLength="11" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="İlac" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Doktor" Relationship="Self.FK_Muayene_Doktor" FromRole="Muayene" ToRole="Doktor" />
+    <NavigationProperty Name="Hasta" Relationship="Self.FK_Muayene_Hasta" FromRole="Muayene" ToRole="Hasta" />
+    <NavigationProperty Name="İlaç" Relationship="Self.FK_Muayene_İlaç" FromRole="Muayene" ToRole="İlaç" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Hasta_Doktor">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="1" />
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doktor">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Hasta">
+        <PropertyRef Name="AileHekimi" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_Doktor">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doktor">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="Doktoru" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_Hasta">
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Hasta">
+        <PropertyRef Name="Tcno" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="TCno" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Muayene_İlaç">
+    <End Role="İlaç" Type="Self.İlaç" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Muayene" Type="Self.Muayene" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="İlaç">
+        <PropertyRef Name="İlaç_Adı" />
+      </Principal>
+      <Dependent Role="Muayene">
+        <PropertyRef Name="İlac" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DH">
+    <End Role="Doktor" Type="Self.Doktor" Multiplicity="*" />
+    <End Role="Hasta" Type="Self.Hasta" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="HastahaneEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Doktor" EntityType="Self.Doktor" />
+    <EntitySet Name="Hasta" EntityType="Self.Hasta" />
+    <EntitySet Name="İlaç" EntityType="Self.İlaç" />
+    <EntitySet Name="Muayene" EntityType="Self.Muayene" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <AssociationSet Name="FK_Hasta_Doktor" Association="Self.FK_Hasta_Doktor">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="Hasta" EntitySet="Hasta" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_Doktor" Association="Self.FK_Muayene_Doktor">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_Hasta" Association="Self.FK_Muayene_Hasta">
+      <End Role="Hasta" EntitySet="Hasta" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Muayene_İlaç" Association="Self.FK_Muayene_İlaç">
+      <End Role="İlaç" EntitySet="İlaç" />
+      <End Role="Muayene" EntitySet="Muayene" />
+    </AssociationSet>
+    <AssociationSet Name="DH" Association="Self.DH">
+      <End Role="Doktor" EntitySet="Doktor" />
+      <End Role="Hasta" EntitySet="Hasta" />
+    </AssociationSet>
+    <FunctionImport Name="buldur" ReturnType="Collection(Decimal)">
+      <Parameter Name="TC8" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="gider" ReturnType="Collection(Decimal)">
+      <Parameter Name="Tc" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="keke" ReturnType="Collection(DateTime)" />
+    <FunctionImport Name="leona">
+      <Parameter Name="Tc" Mode="In" Type="String" />
+      <Parameter Name="sonuc" Mode="InOut" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(HastahaneModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(HastahaneModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <FunctionImport Name="Tarihtenİlaclara" ReturnType="Collection(HastahaneModel.Tarihtenİlaclara_Result)">
+      <Parameter Name="Tcno" Mode="In" Type="String" />
+      <Parameter Name="tarih" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="tresh" ReturnType="Collection(HastahaneModel.tresh_Result)">
+      <Parameter Name="Tc" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="MuayeneDoktor" ReturnType="Collection(HastahaneModel.MuayeneDoktor_Result)">
+      <Parameter Name="TC8" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="Tarihtenİlaclara_Result">
+    <Property Type="String" Name="İlaç_Adı" Nullable="false" MaxLength="50" />
+    <Property Type="Decimal" Name="Fiyatı" Nullable="false" Precision="19" />
+  </ComplexType>
+  <ComplexType Name="tresh_Result">
+    <Property Type="DateTime" Name="Tarih" Nullable="false" />
+    <Property Type="String" Name="TCno" Nullable="true" MaxLength="11" />
+    <Property Type="String" Name="Branşı" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Doktoru" Nullable="false" MaxLength="11" />
+    <Property Type="String" Name="İlac" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="İlaç_Adı" Nullable="false" MaxLength="50" />
+    <Property Type="Decimal" Name="Fiyatı" Nullable="false" Precision="19" />
+  </ComplexType>
+  <ComplexType Name="MuayeneDoktor_Result">
+    <Property Type="DateTime" Name="Tarih" Nullable="false" />
+    <Property Type="String" Name="TCno" Nullable="true" MaxLength="11" />
+    <Property Type="String" Name="Branşı" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Doktoru" Nullable="false" MaxLength="11" />
+    <Property Type="String" Name="İlac" Nullable="true" MaxLength="50" />
+  </ComplexType>
+</Schema>
